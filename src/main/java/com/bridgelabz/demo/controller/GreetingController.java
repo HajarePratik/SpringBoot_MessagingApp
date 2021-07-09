@@ -1,26 +1,29 @@
 package com.bridgelabz.demo.controller;
 
-import java.util.concurrent.atomic.AtomicLong;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.demo.model.Greeting;
+import com.bridgelabz.demo.model.User;
+import com.bridgelabz.demo.service.IGreetingService;
 
 @RestController
+@RequestMapping("/greetings")
 public class GreetingController 
 {
+	@Autowired
+	private IGreetingService greetingService;
 	
-	private static final String templete = "Hello, %s!";
-	private final AtomicLong counter = new AtomicLong();
-	
-	@GetMapping("/greeting")
-	public Greeting greeting(@RequestParam(value="name",defaultValue = "Pratik")String name)
+	@GetMapping("")
+	public Greeting greeting(@RequestParam(value="fname",defaultValue = "Pratik")String fname,@RequestParam(value="lname",defaultValue = "Hajare")String lname)
 	{
-		return new Greeting(counter.incrementAndGet(),
-				String.format(templete, name));
+		User user = new User();
+		user.setFirstName(fname);
+		user.setLastName(lname);
+		return greetingService.addGreeting(user);
 	}
 	
 	
